@@ -1,0 +1,20 @@
+# refer: https://github.com/grpc/grpc-docker-library/blob/master/1.15.0/python/alpine/Dockerfile
+FROM python:3.7-alpine as base
+
+FROM base as builder
+RUN apk add --update --no-cache \
+    gcc \
+    linux-headers \
+    make \
+    musl-dev \
+    python-dev \
+    g++
+
+RUN python -m pip install --upgrade pip
+ENV GRPC_PYTHON_VERSION 1.25.0
+ENV PROTO_PYTHON_VERSION 3.11.1
+RUN pip install --install-option="--prefix=/install" grpcio==${GRPC_PYTHON_VERSION} protobuf==${PROTO_PYTHON_VERSION}
+
+FROM base
+COPY --from=builder /install /usr/local
+RUN apk add --no-cache libstdc++
