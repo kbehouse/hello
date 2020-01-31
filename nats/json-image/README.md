@@ -15,7 +15,11 @@ Request
 
 ```
 go run json-img-request.go encode-decode.go
+# or 
+nats-req json-test '{"cmd": "readImage", "imgPath": "example.jpg"}'
 ```
+
+
 
 ## Refer
 

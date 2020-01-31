@@ -27,10 +27,9 @@ func main() {
 	}
 
 	log.Printf("NATS Subscribe Topic: %s", natsSubTopic)
-	type person struct {
-		Name    string
-		Address string
-		Age     int
+	type Command struct {
+		Cmd     string `json:"cmd,omitempty"`
+		ImgPath string `json:"imgPath,omitempty"`
 	}
 	wg := sync.WaitGroup{}
 	wg.Add(1)
@@ -40,12 +39,12 @@ func main() {
 	// 	nc.Publish(s.Reply, []byte("there is no s.Reply field available"))
 	// })
 
-	c.Subscribe(natsSubTopic, func(subj, reply string, p *person) {
+	c.Subscribe(natsSubTopic, func(subj, reply string, cmd *Command) {
 		// log.Printf("Reply-Topic: %v", reply)
-		if reply != "" {
-			nc.Publish(reply, []byte(encodeFromFile("./example.jpg")))
+		if cmd.Cmd == "readImage" && reply != "" {
+			nc.Publish(reply, []byte(encodeFromFile(cmd.ImgPath)))
 		}
-		log.Printf("Received a person on subject %s! %+v\n", subj, p)
+		log.Printf("Received a person on subject %s! %+v\n", subj, cmd)
 	})
 
 	// Wait for a message to come in

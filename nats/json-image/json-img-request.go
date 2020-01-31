@@ -24,14 +24,13 @@ func main() {
 	c, _ := nats.NewEncodedConn(nc, nats.JSON_ENCODER)
 	defer c.Close()
 
-	type person struct {
-		Name    string
-		Address string
-		Age     int
+	type Command struct {
+		Cmd     string `json:"cmd,omitempty"`
+		ImgPath string `json:"imgPath,omitempty"`
 	}
 
 	response := ""
-	me := &person{Name: "derek", Age: 22, Address: "85 Second St"}
+	me := &Command{Cmd: "readImage", ImgPath: "./example.jpg"}
 	c.Request(natsPubTopic, me, &response, time.Second)
 
 	nc.Flush()

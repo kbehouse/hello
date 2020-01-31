@@ -1,6 +1,7 @@
 # NATS
 
-see: https://docs.nats.io/developing-with-nats/developer for more examples
+see: https://docs.nats.io/developing-with-nats/sending/request_reply for more examples
+
 
 ## nats.go
 
